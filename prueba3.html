@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Información</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style>
+        .form-container {
+            display: none;
+            padding: 20px;
+        }
+        .form-container div {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="w3-bar w3-black">
+    <button class="w3-bar-item w3-button" onclick="mostrarFormulario('form-producto')">Registrar Producto</button>
+    <button class="w3-bar-item w3-button" onclick="mostrarFormulario('form-proveedor')">Registrar Proveedor</button>
+    <button class="w3-bar-item w3-button" onclick="mostrarFormulario('form-compra')">Registrar Compra</button>
+    <button class="w3-bar-item w3-button" onclick="mostrarFormulario('form-venta')">Registrar Venta</button>
+</div>
+
+<div id="form-producto" class="form-container">
+    <h2>Registro de Producto</h2>
+    <div>
+        <label for="id_producto">ID:</label>
+        <input type="text" id="id_producto" name="id_producto">
+    </div>
+    <div>
+        <label for="nombre_producto">Nombre del producto:</label>
+        <input type="text" id="id_nombreproducto" name="nombre_producto">
+    </div>
+    <div>
+        <label for="precio_producto">Precio:</label>
+        <input type="text" id="precio_producto" name="precio_producto">
+    </div>
+    <div>
+        <label for="cantidad_stock">Cantidad en stock:</label>
+        <input type="text" id="cantidad_stock" name="cantidad_stock">
+    </div>
+    <div>
+        <label for="categoria_producto">Categoría:</label>
+        <input type="text" id="categoria_producto" name="categoria_producto">
+    </div>
+    
+
+    <button onclick="registrarProducto()">Registrar Producto</button>
+</div>
+
+<div id="form-proveedor" class="form-container">
+    <h2>Registro de Proveedor</h2>
+    <div>
+        <label for="nombre_proveedor">Nombre:</label>
+        <input type="text" id="nombre_proveedor" name="nombre_proveedor" required>
+    </div>
+    <div>
+        <label for="direccion_proveedor">Dirección:</label>
+        <input type="text" id="direccion_proveedor" name="direccion_proveedor">
+    </div>
+    <div>
+        <label for="telefono_proveedor">Teléfono:</label>
+        <input type="tel" id="telefono_proveedor" name="telefono_proveedor" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="Formato: xxx-xxx-xxxx" required>
+    </div>
+    <div>
+        <label for="email_proveedor">Correo Electrónico:</label>
+        <input type="email" id="email_proveedor" name="email_proveedor" required>
+    </div>
+    <button onclick="registrarProveedor()">Registrar Proveedor</button>
+</div>
+
+<div id="form-compra" class="form-container">
+    <h2>Registro de Compra</h2>
+    <div class="form-row">
+        <label for="fecha_compra">Fecha:</label>
+        <input type="date" id="fecha_compra" name="fecha_compra" required>
+    </div>
+    <div class="form-row">
+        <label for="producto_comprado">Producto Comprado:</label>
+        <input type="text" id="producto_comprado" name="producto_comprado">
+    </div>
+    <div class="form-row">
+        <label for="cantidad_comprada">Cantidad Comprada:</label>
+        <input type="number" id="cantidad_comprada" name="cantidad_comprada" min="1" required>
+    </div>
+    <div class="form-row">
+        <label for="precio_unitario">Precio Unitario:</label>
+        <input type="number" id="precio_unitario" name="precio_unitario" min="0.01" step="0.01" required>
+    </div>
+    <button onclick="registrarCompra()">Registrar Compra</button>
+</div>
+
+<div id="form-venta" class="form-container">
+    <h2>Registro de Venta</h2>
+    <div class="form-row">
+        <label for="fecha_venta">Fecha:</label>
+        <input type="date" id="fecha_venta" name="fecha_venta" required>
+    </div>
+    <div class="form-row">
+        <label for="producto_vendido">Producto Vendido:</label>
+        <input type="text" id="producto_vendido" name="producto_vendido">
+    </div>
+    <div class="form-row">
+        <label for="cantidad_vendida">Cantidad Vendida:</label>
+        <input type="number" id="cantidad_vendida" name="cantidad_vendida" min="1" required>
+    </div>
+    <div class="form-row">
+        <label for="precio_unitario_venta">Precio Unitario:</label>
+        <input type="number" id="precio_unitario_venta" name="precio_unitario_venta" min="0.01" step="0.01" required>
+    </div>
+    <button onclick="registrarVenta()">Registrar Venta</button>
+</div>
+
+<script>
+    function mostrarFormulario(idFormulario) {
+        var formularios = document.querySelectorAll('.form-container');
+        formularios.forEach(function(formulario) {
+            formulario.style.display = 'none';
+        });
+        document.getElementById(idFormulario).style.display = 'block';
+    }
+
+    function registrarProducto() {
+    fetch('http://localhost/backend.php', {
+        method: 'post',
+        body: new FormData(document.getElementById('form-producto')),
+        headers: {'accion': 'registrarProducto'}
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log(data);
+        // Muestra algún mensaje de éxito o error al usuario si es necesario
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+    // Función para registrar un proveedor
+    function registrarProveedor() {
+    fetch('http://localhost/backend.php', {
+        method: 'post',
+        body: new FormData(document.getElementById('form-proveedor')),
+        headers: {'accion': 'registrarProveedor'}
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log(data);
+        // Muestra algún mensaje de éxito o error al usuario si es necesario
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+    // Función para registrar una compra
+    function registrarCompra() {
+    fetch('http://localhost/backend.php', {
+        method: 'post',
+        body: new FormData(document.getElementById('form-compra')),
+        headers: {'accion': 'registrarCompra'}
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log(data);
+        // Muestra algún mensaje de éxito o error al usuario si es necesario
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+
+    // Función para registrar una venta
+    function registrarVenta() {
+    fetch('http://localhost/backend.php', {
+        method: 'post',
+        body: new FormData(document.getElementById('form-venta')),
+        headers: {'accion': 'registrarVenta'}
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log(data);
+        // Muestra algún mensaje de éxito o error al usuario si es necesario
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+</script>
+
+</body>
+</html>
